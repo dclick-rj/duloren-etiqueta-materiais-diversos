@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33027.164
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "duloren-etiqueta-materiais-diversos", "duloren-etiqueta-materiais-diversos\duloren-etiqueta-materiais-diversos.csproj", "{AE16BC42-B157-47CA-938C-E81E3DBD600B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE16BC42-B157-47CA-938C-E81E3DBD600B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE16BC42-B157-47CA-938C-E81E3DBD600B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE16BC42-B157-47CA-938C-E81E3DBD600B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE16BC42-B157-47CA-938C-E81E3DBD600B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {83D9829A-F011-4F26-B213-EAAE7B9083A9}
+	EndGlobalSection
+EndGlobal
