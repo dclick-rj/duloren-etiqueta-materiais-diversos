@@ -65,7 +65,7 @@ namespace duloren_etiqueta_materiais_diversos
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pgBar);
             this.Name = "Form1";
-            this.Text = "DULOREN ETIQUETA MATERIAIS DIVERSOS";
+            this.Text = "DULOREN ETIQUETA MATERIAIS DIVERSOS (V1.0)";
             this.ResumeLayout(false);
             this.PerformLayout();
 

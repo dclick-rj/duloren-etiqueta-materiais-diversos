@@ -66,7 +66,7 @@ namespace duloren_etiqueta_materiais_diversos
                 }
 
                 // processa as etiquetas
-                GerarEtiquetaC(list);
+                GerarEtiquetaC(list);//
             });
 
             //pgBar.Style = ProgressBarStyle.Marquee; // volta ao normal
