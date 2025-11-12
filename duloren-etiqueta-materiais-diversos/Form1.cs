@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using duloren_etiqueta_materiais_diversos.DTO;
 
 namespace duloren_etiqueta_materiais_diversos
 {
@@ -346,6 +347,45 @@ namespace duloren_etiqueta_materiais_diversos
                 System.Threading.Thread.Sleep(2000); // pausa por 2 segundos (2000 ms)
 
                 //atualizar etiquetas no AS400
+                AtualizarEtiquetaAS400(etq);
+            }
+        }
+
+        private void AtualizarEtiquetaAS400(Etiqueta etq)
+        {
+            string update = "UPDATE DULTSTMEST.CMT200F1 SET CDSTAT = '*' WHERE CDMATE = " + etq.Material;
+
+            //dultstmest.ENCOST WHERE EMARCA = '' ";
+            ExecutaAS400(update);
+        }
+
+        protected void ExecutaAS400(String parSQL)
+        {
+            OleDbCommand objComando = null;
+
+            try
+            {
+                OpenConnectionAS400();
+
+                objComando = new OleDbCommand();
+                if (objTransacao != null)
+                {
+                    objComando.Transaction = objTransacaoAS400;
+                }
+
+                objComando.Connection = objConexaoAS400;
+                objComando.CommandText = parSQL;
+                objComando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                LogarErro(ex, parSQL);
+
+                //DialogResult dialogResult2 = MessageBox.Show("Erro ao atualizar etiqueta no banco, query: " + parSQL + ", informe o administrador!", "Informação", MessageBoxButtons.OK);
+            }
+            finally
+            {
+                CloseConnectionAS400();
             }
         }
     }

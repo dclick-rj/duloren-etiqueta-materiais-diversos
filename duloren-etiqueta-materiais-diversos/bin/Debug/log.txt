@@ -1,0 +1,10 @@
+********** 12/11/2025 08:25:39 **********
+Query:  SELECT CDMATE, QTESTQ, DTULEN FROM DULTSTMEST.CMT200F1 WHERE CDSTAT = ''
+Inner Exception: 
+Sem informação.
+Tipo da Exception: System.Data.OleDb.OleDbException
+Exception Mensagem: CWBCO1003 - Erro de soquete, a função  retornou 10065, 192.168.1.1
+Stack Trace: 
+   em duloren_etiqueta_materiais_diversos.Form1.OpenConnectionAS400() na C:\workspace\Duloren\duloren-etiqueta-materiais-diversos\duloren-etiqueta-materiais-diversos\Form1.cs:linha 153
+   em duloren_etiqueta_materiais_diversos.Form1.ExecutaLeituraAS400(String parSQL) na C:\workspace\Duloren\duloren-etiqueta-materiais-diversos\duloren-etiqueta-materiais-diversos\Form1.cs:linha 97
+
