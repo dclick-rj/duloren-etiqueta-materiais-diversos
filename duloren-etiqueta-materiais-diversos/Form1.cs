@@ -44,30 +44,60 @@ namespace duloren_etiqueta_materiais_diversos
             MontarEtiquetas();
         }
 
-        private void MontarEtiquetas()
+        private async void MontarEtiquetas()
         {
             timer1.Stop();
+            pgBar.Style = ProgressBarStyle.Marquee; // Mostra que está processando
 
-            List<DTO.Etiqueta> list = new List<DTO.Etiqueta>();
-
-            //rodar a query que busca os dados
-            DataTable objTabela = getEtiquetas();
-
-            foreach (DataRow objLinha in objTabela.Rows)
+            await Task.Run(() =>
             {
-                DTO.Etiqueta etiquetaBD = new DTO.Etiqueta();
-                etiquetaBD.Material = objLinha["CDMATE"].ToString();
-                etiquetaBD.Qtd = objLinha["QTESTQ"].ToString();
-                etiquetaBD.Data = objLinha["DTULEN"].ToString();
+                List<DTO.Etiqueta> list = new List<DTO.Etiqueta>();
+                DataTable objTabela = getEtiquetas();
 
-                list.Add(etiquetaBD);
-            }
+                foreach (DataRow objLinha in objTabela.Rows)
+                {
+                    DTO.Etiqueta etiquetaBD = new DTO.Etiqueta();
+                    etiquetaBD.Material = objLinha["CDMATE"].ToString();
+                    etiquetaBD.Qtd = objLinha["QTESTQ"].ToString();
+                    etiquetaBD.Data = objLinha["DTULEN"].ToString().Substring(6, 2) + "/" +
+                                      objLinha["DTULEN"].ToString().Substring(4, 2) + "/" +
+                                      objLinha["DTULEN"].ToString().Substring(0, 4);
+                    list.Add(etiquetaBD);
+                }
 
-            //passas list para processo das etiquetas
-            GerarEtiquetaC(list);
+                // processa as etiquetas
+                GerarEtiquetaC(list);
+            });
 
+            //pgBar.Style = ProgressBarStyle.Marquee; // volta ao normal
             timer1.Start();
         }
+
+
+        //private void MontarEtiquetas()
+        //{
+        //    timer1.Stop();
+
+        //    List<DTO.Etiqueta> list = new List<DTO.Etiqueta>();
+
+        //    //rodar a query que busca os dados
+        //    DataTable objTabela = getEtiquetas();
+
+        //    foreach (DataRow objLinha in objTabela.Rows)
+        //    {
+        //        DTO.Etiqueta etiquetaBD = new DTO.Etiqueta();
+        //        etiquetaBD.Material = objLinha["CDMATE"].ToString();
+        //        etiquetaBD.Qtd = objLinha["QTESTQ"].ToString();
+        //        etiquetaBD.Data = objLinha["DTULEN"].ToString().Substring(6,2) + "/" +  objLinha["DTULEN"].ToString().Substring(4,2) + "/" + objLinha["DTULEN"].ToString().Substring(0,4);
+
+        //        list.Add(etiquetaBD);
+        //    }
+
+        //    //passas list para processo das etiquetas
+        //    GerarEtiquetaC(list);
+
+        //    timer1.Start();
+        //}
 
         private DataTable getEtiquetas()
         {
@@ -77,7 +107,7 @@ namespace duloren_etiqueta_materiais_diversos
             {
                 //s_SQL = @" SELECT PEDIDO, UF, CIDADE, TRANSP, CONFER, VOLUME, MARCA FROM dulprdmest.arqcai WHERE MARCA = '' AND PEDIDO = '213965' ";
                 //s_SQL = @" SELECT EPEDID, EUF, ECIDAD, ETRANS, ECONFE, EVOLUM, EDIA, EMES, EANO FROM dultstmest.ENCOST WHERE EMARCA = '' ";
-                s_SQL = @" SELECT CDMATE, QTESTQ, DTULEN FROM DULTSTMEST.CMT200F1 WHERE CDSTAT = ''";// WHERE EMARCA = ''";// and EPEDID = '248772'";
+                s_SQL = @" SELECT CDMATE, QTESTQ, DTULEN FROM DULTSTMEST.CMT200F1 WHERE CDSTAT = '' AND CDFABR = 1 ";// WHERE EMARCA = ''";// and EPEDID = '248772'";
 
                 return ExecutaLeituraAS400(s_SQL);
 
@@ -228,6 +258,127 @@ namespace duloren_etiqueta_materiais_diversos
         {
             int contador = 0;
 
+            for (int i = 0; i < list.Count; i += 2)
+            {
+                DTO.Etiqueta etq1 = list[i];
+                DTO.Etiqueta etq2 = (i + 1 < list.Count) ? list[i + 1] : null; // pode não ter par
+
+                //string valor = etq.Qtd.ToString();
+
+                //// Primeiro completa à esquerda
+                //string qtdComZeros = valor.PadLeft((7 + valor.Length) / 2, '0');
+
+                //// Depois completa à direita até dar 7
+                //qtdComZeros = qtdComZeros.PadRight(7, '0');
+
+                StringBuilder msg = new StringBuilder();
+
+                msg.AppendLine("L");
+                msg.AppendLine("D11");
+                msg.AppendLine("W");
+                msg.AppendLine("PK");
+                msg.AppendLine("SK");
+                msg.AppendLine("H21");
+                msg.AppendLine("R0000");
+                
+                //codigo barras
+                msg.AppendLine("1E1104001600021" + etq1.Material.PadLeft(6, '0'));  // LINHA DO CODBAR 1
+
+                if(etq2 != null)
+                {
+                    msg.AppendLine("1E1104001600202" + etq2.Material.PadLeft(6, '0'));  // LINHA DO CODBAR 2
+                }
+                else
+                {
+                    msg.AppendLine("1E1104001600202" + "".PadLeft(6, ' '));  // LINHA DO CODBAR 2
+                }
+                
+                //msg.AppendLine("131100101430005NP: " + "000" + etq.Np);//linha da NP 1 ------------
+                //msg.AppendLine("131100101430186NP: " + "000" + etq.Np);//linha da NP 2 ------------
+
+                //rev
+                msg.AppendLine("131100101280005OP.: 1 REV.:92");
+
+                if (etq2 != null)
+                {
+                    msg.AppendLine("131100101280186OP.: 1 REV.:92");
+                }
+                else
+                {
+                    msg.AppendLine("131100101280186" + "".PadLeft(6, ' '));
+                }
+
+                //quantidade
+                msg.AppendLine("131100101130005QTD.: " + etq1.Qtd);
+
+                if (etq2 != null)
+                {
+                    msg.AppendLine("131100101130186QTD.: " + etq2.Qtd);
+                }
+                else
+                {
+                    msg.AppendLine("131100101130186" + "".PadLeft(6, ' '));
+                }
+
+                //data
+                msg.AppendLine("131100101000005DATA: " + etq1.Data);
+
+                if (etq2 != null)
+                {
+                    msg.AppendLine("131100101000186DATA: " + etq2.Data);
+                }
+                else
+                {
+                    msg.AppendLine("131100101000186" + "".PadLeft(6, ' '));
+                }
+               
+                //material
+                msg.AppendLine("131100100860005MATERIAL: " + etq1.Material.PadLeft(6, '0'));
+
+                if (etq2 != null)
+                {
+                    msg.AppendLine("131100100860186MATERIAL: " + etq2.Material.PadLeft(6, '0'));
+                }
+                else
+                {
+                    msg.AppendLine("131100100860186" + "".PadLeft(6, ' '));
+                }
+
+                msg.AppendLine("Q");
+                msg.AppendLine("E");
+                msg.AppendLine("");
+
+                string texto = msg.ToString();
+
+                string nome_arquivo = caminhoConfiguracao + @"\etiq.prn";
+
+                if (!File.Exists(nome_arquivo))
+                {
+                    File.Create(nome_arquivo).Close();
+                }
+                else
+                {
+                    File.Delete(nome_arquivo);
+                    File.Create(nome_arquivo).Close();
+                }
+
+                TextWriter arquivo = File.AppendText(nome_arquivo);
+                arquivo.WriteLine(texto);
+                arquivo.Close();
+
+                System.Diagnostics.Process.Start(caminhoConfiguracao + @"\etiq.bat");
+
+                System.Threading.Thread.Sleep(3000); // pausa por 2 segundos (2000 ms)
+
+                //atualizar etiquetas no AS400
+                AtualizarEtiquetaAS400(etq1, etq2);
+            }
+        }
+
+        private void GerarEtiquetaCDuasEtiquetasIguais(List<DTO.Etiqueta> list)
+        {
+            int contador = 0;
+
             foreach (DTO.Etiqueta etq in list)
             {
 
@@ -294,8 +445,8 @@ namespace duloren_etiqueta_materiais_diversos
 
                 //msg.AppendLine("121100101040021MATERIAL: " + etq.Material);
                 //msg.AppendLine("121100101040202MATERIAL: " + etq.Material);
-                msg.AppendLine("131100100860005MATERIAL: " + etq.Material);
-                msg.AppendLine("131100100860186MATERIAL: " + etq.Material);
+                msg.AppendLine("131100100860005MATERIAL: " + etq.Material.PadLeft(6, '0'));
+                msg.AppendLine("131100100860186MATERIAL: " + etq.Material.PadLeft(6, '0'));
 
                 //msg.AppendLine("121100100910021COR: " + etq.Cor + " TARA:0,00");
                 //msg.AppendLine("121100100910202COR: " + etq.Cor + " TARA:0,00");
@@ -344,19 +495,27 @@ namespace duloren_etiqueta_materiais_diversos
 
                 System.Diagnostics.Process.Start(caminhoConfiguracao + @"\etiq.bat");
 
-                System.Threading.Thread.Sleep(2000); // pausa por 2 segundos (2000 ms)
+                System.Threading.Thread.Sleep(3000); // pausa por 2 segundos (2000 ms)
 
                 //atualizar etiquetas no AS400
-                AtualizarEtiquetaAS400(etq);
+                //AtualizarEtiquetaAS400(etq);
             }
         }
 
-        private void AtualizarEtiquetaAS400(Etiqueta etq)
+        private void AtualizarEtiquetaAS400(Etiqueta etq1, Etiqueta etq2)
         {
-            string update = "UPDATE DULTSTMEST.CMT200F1 SET CDSTAT = '*' WHERE CDMATE = " + etq.Material;
+            string update = "UPDATE DULTSTMEST.CMT200F1 SET CDSTAT = '*' WHERE CDMATE = " + etq1.Material + " AND CDFABR = 1 ";
 
             //dultstmest.ENCOST WHERE EMARCA = '' ";
             ExecutaAS400(update);
+
+            if(etq2 != null)
+            {
+                string update2 = "UPDATE DULTSTMEST.CMT200F1 SET CDSTAT = '*' WHERE CDMATE = " + etq2.Material + " AND CDFABR = 1 ";
+
+                //dultstmest.ENCOST WHERE EMARCA = '' ";
+                ExecutaAS400(update2);
+            }
         }
 
         protected void ExecutaAS400(String parSQL)
