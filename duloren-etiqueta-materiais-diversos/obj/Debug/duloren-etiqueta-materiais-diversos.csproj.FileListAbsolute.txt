@@ -18,3 +18,5 @@ C:\workspace\Duloren\duloren-etiqueta-materiais-diversos\duloren-etiqueta-materi
 C:\workspace\Duloren\duloren-etiqueta-materiais-diversos\duloren-etiqueta-materiais-diversos\bin\Debug\duloren-etiqueta-materiais-diversos.exe.config
 C:\workspace\Duloren\duloren-etiqueta-materiais-diversos\duloren-etiqueta-materiais-diversos\bin\Debug\duloren-etiqueta-materiais-diversos.exe
 C:\workspace\Duloren\duloren-etiqueta-materiais-diversos\duloren-etiqueta-materiais-diversos\bin\Debug\duloren-etiqueta-materiais-diversos.pdb
+C:\workspace\Duloren\duloren-etiqueta-materiais-diversos\duloren-etiqueta-materiais-diversos\bin\Debug\MaterialSkin.dll
+C:\workspace\Duloren\duloren-etiqueta-materiais-diversos\duloren-etiqueta-materiais-diversos\obj\Debug\duloren-etiqueta-materiais-diversos.csproj.CopyComplete

@@ -11,5 +11,6 @@ namespace duloren_etiqueta_materiais_diversos.DTO
         public string Qtd { get; set; }
         public string Data { get; set; }
         public string Material { get; set; }
+        public string DescMaterial { get; set; }
     }
 }

@@ -14,7 +14,7 @@ using duloren_etiqueta_materiais_diversos.DTO;
 
 namespace duloren_etiqueta_materiais_diversos
 {
-    public partial class Form1 : Form
+    public partial class Form1 : MaterialSkin.Controls.MaterialForm
     {
         private string caminhoConfiguracao = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         protected String strStringConexaoAS400 = null;
@@ -62,11 +62,18 @@ namespace duloren_etiqueta_materiais_diversos
                     etiquetaBD.Data = objLinha["DTULEN"].ToString().Substring(6, 2) + "/" +
                                       objLinha["DTULEN"].ToString().Substring(4, 2) + "/" +
                                       objLinha["DTULEN"].ToString().Substring(0, 4);
+                    etiquetaBD.DescMaterial = objLinha["DSMATE"].ToString();
+
+                    if(etiquetaBD.DescMaterial.Length > 17)
+                    {
+                        etiquetaBD.DescMaterial.Substring(0, 17);
+                    }
+
                     list.Add(etiquetaBD);
                 }
 
                 // processa as etiquetas
-                GerarEtiquetaC(list);//
+                //GerarEtiquetaC(list);//
             });
 
             //pgBar.Style = ProgressBarStyle.Marquee; // volta ao normal
@@ -107,7 +114,7 @@ namespace duloren_etiqueta_materiais_diversos
             {
                 //s_SQL = @" SELECT PEDIDO, UF, CIDADE, TRANSP, CONFER, VOLUME, MARCA FROM dulprdmest.arqcai WHERE MARCA = '' AND PEDIDO = '213965' ";
                 //s_SQL = @" SELECT EPEDID, EUF, ECIDAD, ETRANS, ECONFE, EVOLUM, EDIA, EMES, EANO FROM dultstmest.ENCOST WHERE EMARCA = '' ";
-                s_SQL = @" SELECT CDMATE, QTESTQ, DTULEN FROM DULTSTMEST.CMT200F1 WHERE CDSTAT = '' AND CDFABR = 1 ";// WHERE EMARCA = ''";// and EPEDID = '248772'";
+                s_SQL = @" SELECT CDMATE, QTESTQ, DTULEN, DSMATE FROM DULTSTMEST.CMT200F1 WHERE CDSTAT = '' AND CDFABR = 1 ";// WHERE EMARCA = ''";// and EPEDID = '248772'";
 
                 return ExecutaLeituraAS400(s_SQL);
 
@@ -343,6 +350,18 @@ namespace duloren_etiqueta_materiais_diversos
                 {
                     msg.AppendLine("131100100860186" + "".PadLeft(6, ' '));
                 }
+
+                msg.AppendLine("131100100720005DESC: " + etq1.DescMaterial);//cor 1 --------------
+
+                if (etq2 != null)
+                {
+                    msg.AppendLine("131100100720186DESC: " + etq2.DescMaterial);//cor 2 --------------
+                }
+                else
+                {
+                    msg.AppendLine("131100100720005DESC: " + etq1.DescMaterial);//cor 1 --------------
+                }
+                
 
                 msg.AppendLine("Q");
                 msg.AppendLine("E");
