@@ -129,7 +129,7 @@ namespace duloren_etiqueta_materiais_diversos
             this.Controls.Add(this.txtMaterial);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
-            this.Text = "Etiqueta Materiais Diversos (V1.0)";
+            this.Text = "Etiqueta Materiais Diversos (V1.1)";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

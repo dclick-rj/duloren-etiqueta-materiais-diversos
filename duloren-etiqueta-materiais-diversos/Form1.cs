@@ -75,7 +75,14 @@ namespace duloren_etiqueta_materiais_diversos
                     list.Add(etiquetaBD1);
                 }
 
+                if(objTabela1.Rows.Count == 0)
+                {
+                    DialogResult dialogResult = MessageBox.Show("Material não encontrado!", "Informação", MessageBoxButtons.OK);
+                }
+
                 materialReimpresso = "";
+
+                txtMaterial.Text = "";
             }
 
             await Task.Run(() =>
@@ -102,7 +109,7 @@ namespace duloren_etiqueta_materiais_diversos
                 }
 
                 // processa as etiquetas
-                //GerarEtiquetaC(list);//
+                GerarEtiquetaC(list);//
             });
 
             //pgBar.Style = ProgressBarStyle.Marquee; // volta ao normal
