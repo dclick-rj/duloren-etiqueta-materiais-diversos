@@ -107,6 +107,7 @@ namespace duloren_etiqueta_materiais_diversos
             this.btnReimprimir.TabIndex = 75;
             this.btnReimprimir.Text = "Reimprimir";
             this.btnReimprimir.UseVisualStyleBackColor = false;
+            this.btnReimprimir.Click += new System.EventHandler(this.btnReimprimir_Click);
             // 
             // pictureBox1
             // 

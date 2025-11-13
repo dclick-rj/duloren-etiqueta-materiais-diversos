@@ -19,6 +19,8 @@ namespace duloren_etiqueta_materiais_diversos
         private string caminhoConfiguracao = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         protected String strStringConexaoAS400 = null;
 
+        private string materialReimpresso = "";
+
         protected SqlTransaction objTransacao = null;
 
         protected OleDbTransaction objTransacaoAS400 = null;
@@ -49,6 +51,11 @@ namespace duloren_etiqueta_materiais_diversos
             timer1.Stop();
             pgBar.Style = ProgressBarStyle.Marquee; // Mostra que está processando
 
+            if (!materialReimpresso.Equals(""))
+            {
+
+            }
+
             await Task.Run(() =>
             {
                 List<DTO.Etiqueta> list = new List<DTO.Etiqueta>();
@@ -64,9 +71,9 @@ namespace duloren_etiqueta_materiais_diversos
                                       objLinha["DTULEN"].ToString().Substring(0, 4);
                     etiquetaBD.DescMaterial = objLinha["DSMATE"].ToString();
 
-                    if(etiquetaBD.DescMaterial.Length > 17)
+                    if(etiquetaBD.DescMaterial.Length > 11)
                     {
-                        etiquetaBD.DescMaterial.Substring(0, 17);
+                        etiquetaBD.DescMaterial = etiquetaBD.DescMaterial.Substring(0, 11);
                     }
 
                     list.Add(etiquetaBD);
@@ -297,7 +304,7 @@ namespace duloren_etiqueta_materiais_diversos
                 }
                 else
                 {
-                    msg.AppendLine("1E1104001600202" + "".PadLeft(6, ' '));  // LINHA DO CODBAR 2
+                    msg.AppendLine("1E1104001600202" + etq1.Material.PadLeft(6, '0'));  // LINHA DO CODBAR 1
                 }
                 
                 //msg.AppendLine("131100101430005NP: " + "000" + etq.Np);//linha da NP 1 ------------
@@ -312,7 +319,7 @@ namespace duloren_etiqueta_materiais_diversos
                 }
                 else
                 {
-                    msg.AppendLine("131100101280186" + "".PadLeft(6, ' '));
+                    msg.AppendLine("131100101280186OP.: 1 REV.:92");
                 }
 
                 //quantidade
@@ -324,19 +331,19 @@ namespace duloren_etiqueta_materiais_diversos
                 }
                 else
                 {
-                    msg.AppendLine("131100101130186" + "".PadLeft(6, ' '));
+                    msg.AppendLine("131100101130186QTD.: " + etq1.Qtd);
                 }
 
                 //data
-                msg.AppendLine("131100101000005DATA: " + etq1.Data);
+                msg.AppendLine("131100101000005DATA: " + DateTime.Now.ToString("dd/MM/yyyy"));
 
                 if (etq2 != null)
                 {
-                    msg.AppendLine("131100101000186DATA: " + etq2.Data);
+                    msg.AppendLine("131100101000186DATA: " + DateTime.Now.ToString("dd/MM/yyyy"));
                 }
                 else
                 {
-                    msg.AppendLine("131100101000186" + "".PadLeft(6, ' '));
+                    msg.AppendLine("131100101000186DATA: " + DateTime.Now.ToString("dd/MM/yyyy"));
                 }
                
                 //material
@@ -348,7 +355,7 @@ namespace duloren_etiqueta_materiais_diversos
                 }
                 else
                 {
-                    msg.AppendLine("131100100860186" + "".PadLeft(6, ' '));
+                    msg.AppendLine("131100100860186MATERIAL: " + etq1.Material.PadLeft(6, '0'));
                 }
 
                 msg.AppendLine("131100100720005DESC: " + etq1.DescMaterial);//cor 1 --------------
@@ -359,7 +366,7 @@ namespace duloren_etiqueta_materiais_diversos
                 }
                 else
                 {
-                    msg.AppendLine("131100100720005DESC: " + etq1.DescMaterial);//cor 1 --------------
+                    msg.AppendLine("131100100720186DESC: " + etq1.DescMaterial);//cor 1 --------------
                 }
                 
 
@@ -565,6 +572,11 @@ namespace duloren_etiqueta_materiais_diversos
             {
                 CloseConnectionAS400();
             }
+        }
+
+        private void btnReimprimir_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
