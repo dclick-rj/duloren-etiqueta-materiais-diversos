@@ -51,14 +51,36 @@ namespace duloren_etiqueta_materiais_diversos
             timer1.Stop();
             pgBar.Style = ProgressBarStyle.Marquee; // Mostra que está processando
 
+            List<DTO.Etiqueta> list = new List<DTO.Etiqueta>();
+
             if (!materialReimpresso.Equals(""))
             {
+                DataTable objTabela1 = getEtiquetaEspecifica(materialReimpresso);
 
+                foreach (DataRow objLinha in objTabela1.Rows)
+                {
+                    DTO.Etiqueta etiquetaBD1 = new DTO.Etiqueta();
+                    etiquetaBD1.Material = objLinha["CDMATE"].ToString();
+                    etiquetaBD1.Qtd = objLinha["QTESTQ"].ToString();
+                    etiquetaBD1.Data = objLinha["DTULEN"].ToString().Substring(6, 2) + "/" +
+                                      objLinha["DTULEN"].ToString().Substring(4, 2) + "/" +
+                                      objLinha["DTULEN"].ToString().Substring(0, 4);
+                    etiquetaBD1.DescMaterial = objLinha["DSMATE"].ToString();
+
+                    if (etiquetaBD1.DescMaterial.Length > 11)
+                    {
+                        etiquetaBD1.DescMaterial = etiquetaBD1.DescMaterial.Substring(0, 11);
+                    }
+
+                    list.Add(etiquetaBD1);
+                }
+
+                materialReimpresso = "";
             }
 
             await Task.Run(() =>
             {
-                List<DTO.Etiqueta> list = new List<DTO.Etiqueta>();
+                
                 DataTable objTabela = getEtiquetas();
 
                 foreach (DataRow objLinha in objTabela.Rows)
@@ -122,6 +144,25 @@ namespace duloren_etiqueta_materiais_diversos
                 //s_SQL = @" SELECT PEDIDO, UF, CIDADE, TRANSP, CONFER, VOLUME, MARCA FROM dulprdmest.arqcai WHERE MARCA = '' AND PEDIDO = '213965' ";
                 //s_SQL = @" SELECT EPEDID, EUF, ECIDAD, ETRANS, ECONFE, EVOLUM, EDIA, EMES, EANO FROM dultstmest.ENCOST WHERE EMARCA = '' ";
                 s_SQL = @" SELECT CDMATE, QTESTQ, DTULEN, DSMATE FROM DULTSTMEST.CMT200F1 WHERE CDSTAT = '' AND CDFABR = 1 ";// WHERE EMARCA = ''";// and EPEDID = '248772'";
+
+                return ExecutaLeituraAS400(s_SQL);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private DataTable getEtiquetaEspecifica(string material)
+        {
+            String s_SQL = String.Empty;
+
+            try
+            {
+                //s_SQL = @" SELECT PEDIDO, UF, CIDADE, TRANSP, CONFER, VOLUME, MARCA FROM dulprdmest.arqcai WHERE MARCA = '' AND PEDIDO = '213965' ";
+                //s_SQL = @" SELECT EPEDID, EUF, ECIDAD, ETRANS, ECONFE, EVOLUM, EDIA, EMES, EANO FROM dultstmest.ENCOST WHERE EMARCA = '' ";
+                s_SQL = @" SELECT CDMATE, QTESTQ, DTULEN, DSMATE FROM DULTSTMEST.CMT200F1 WHERE CDMATE = " + material + " AND CDFABR = 1 ";// WHERE EMARCA = ''";// and EPEDID = '248772'";
 
                 return ExecutaLeituraAS400(s_SQL);
 
@@ -576,7 +617,7 @@ namespace duloren_etiqueta_materiais_diversos
 
         private void btnReimprimir_Click(object sender, EventArgs e)
         {
-
+            materialReimpresso = txtMaterial.Text;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace duloren_etiqueta_materiais_diversos
             this.label1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.txtUsuario = new MaterialSkin.Controls.MaterialSingleLineTextField();
+            this.txtMaterial = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.btnReimprimir = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
@@ -76,21 +76,21 @@ namespace duloren_etiqueta_materiais_diversos
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Reimprimir Etiqueta";
             // 
-            // txtUsuario
+            // txtMaterial
             // 
-            this.txtUsuario.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.txtUsuario.Depth = 0;
-            this.txtUsuario.Hint = "Código Material";
-            this.txtUsuario.Location = new System.Drawing.Point(79, 176);
-            this.txtUsuario.MouseState = MaterialSkin.MouseState.HOVER;
-            this.txtUsuario.Name = "txtUsuario";
-            this.txtUsuario.PasswordChar = '\0';
-            this.txtUsuario.SelectedText = "";
-            this.txtUsuario.SelectionLength = 0;
-            this.txtUsuario.SelectionStart = 0;
-            this.txtUsuario.Size = new System.Drawing.Size(184, 25);
-            this.txtUsuario.TabIndex = 7;
-            this.txtUsuario.UseSystemPasswordChar = false;
+            this.txtMaterial.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.txtMaterial.Depth = 0;
+            this.txtMaterial.Hint = "Código Material";
+            this.txtMaterial.Location = new System.Drawing.Point(79, 176);
+            this.txtMaterial.MouseState = MaterialSkin.MouseState.HOVER;
+            this.txtMaterial.Name = "txtMaterial";
+            this.txtMaterial.PasswordChar = '\0';
+            this.txtMaterial.SelectedText = "";
+            this.txtMaterial.SelectionLength = 0;
+            this.txtMaterial.SelectionStart = 0;
+            this.txtMaterial.Size = new System.Drawing.Size(184, 25);
+            this.txtMaterial.TabIndex = 7;
+            this.txtMaterial.UseSystemPasswordChar = false;
             // 
             // btnReimprimir
             // 
@@ -126,7 +126,7 @@ namespace duloren_etiqueta_materiais_diversos
             this.ClientSize = new System.Drawing.Size(435, 287);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnReimprimir);
-            this.Controls.Add(this.txtUsuario);
+            this.Controls.Add(this.txtMaterial);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
             this.Text = "Etiqueta Materiais Diversos (V1.0)";
@@ -143,7 +143,7 @@ namespace duloren_etiqueta_materiais_diversos
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private MaterialSkin.Controls.MaterialSingleLineTextField txtUsuario;
+        private MaterialSkin.Controls.MaterialSingleLineTextField txtMaterial;
         private System.Windows.Forms.Button btnReimprimir;
         private System.Windows.Forms.PictureBox pictureBox1;
     }
